@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    // On cible ES2022 pour avoir les features modernes (top-level await, etc.)
+    "target": "ES2022",
+
+    // ESNext = modules ES natifs, requis par Vite
+    "module": "ESNext",
+
+    // "bundler" : résolution de modules façon bundler (Vite/Rollup)
+    // Permet d'importer sans extension .js et d'utiliser les exports/imports de package.json
+    "moduleResolution": "bundler",
+
+    // Bibliothèques disponibles : runtime ES2022 + API du navigateur
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+
+    // Nécessaire pour les décorateurs Lit (@customElement, @state, @property)
+    // TypeScript < 5.0 utilisait "experimentalDecorators", Lit v3 supporte les deux
+    "experimentalDecorators": true,
+
+    // IMPORTANT pour Lit : désactive la sémantique native de class fields
+    // Sans ça, les décorateurs @property ne fonctionnent pas correctement
+    "useDefineForClassFields": false,
+
+    // Mode strict : active toutes les vérifications TypeScript (null checks, etc.)
+    "strict": true,
+
+    // Ignore les erreurs de types dans node_modules (certaines libs ont des types imparfaits)
+    "skipLibCheck": true,
+
+    // Génère des fichiers .d.ts (déclarations de types) — utile si on publie le projet
+    "declaration": false,
+
+    // Permet d'importer des fichiers JSON directement dans TypeScript
+    "resolveJsonModule": true
+  },
+  "include": ["src", "server"],
+  "exclude": ["node_modules", "dist"]
+}

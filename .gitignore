@@ -1,0 +1,90 @@
+# ================================
+# Dépendances
+# ================================
+node_modules/
+
+# ================================
+# Build / Compilation
+# ================================
+dist/
+build/
+*.js.map
+*.d.ts
+
+# TypeScript build info (cache incrémental)
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# ================================
+# Base de données
+# ================================
+*.sqlite
+*.sqlite3
+*.db
+
+# Migrations compilées (si applicable)
+server/migrations/*.js
+
+# ================================
+# Variables d'environnement
+# ================================
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+
+# ================================
+# Logs
+# ================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ================================
+# Tests & couverture
+# ================================
+coverage/
+.nyc_output/
+
+# ================================
+# Vite / Frontend
+# ================================
+.vite/
+
+# ================================
+# Éditeurs & IDE
+# ================================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+
+# ================================
+# Système d'exploitation
+# ================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ================================
+# Divers
+# ================================
+.cache/
+.temp/
+*.tgz

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Apprentissage</title>
+
+    <style>
+      /* ── Reset & base ─────────────────────────────────── */
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        min-height: 100vh;
+      }
+
+      /* ── Header ──────────────────────────────────────── */
+      header {
+        padding: 16px 24px;
+        background: #1e293b;
+        border-bottom: 1px solid #334155;
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+      }
+
+      header h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #f1f5f9;
+      }
+
+      header p {
+        font-size: 0.8rem;
+        color: #64748b;
+      }
+
+      /* ── Conteneur de la grille GridStack ────────────── */
+      .grid-wrapper {
+        padding: 16px;
+      }
+
+      /* GridStack place les widgets en absolute dans ce conteneur */
+      .grid-stack {
+        background: transparent;
+      }
+
+      /* Chaque item GridStack */
+      .grid-stack-item-content {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        overflow: auto;
+        padding: 16px;
+      }
+
+      /* ── Styles partagés par tous les widgets ─────────── */
+
+      /* Titre de widget (aussi poignée de drag) */
+      .widget-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 12px;
+        cursor: grab;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .widget-title:active {
+        cursor: grabbing;
+      }
+
+      /* ── Styles du widget Tâches (task-table) ─────────── */
+      .add-form {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .task-input {
+        flex: 1;
+        padding: 8px 12px;
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        color: #e2e8f0;
+        font-size: 0.9rem;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      .task-input:focus {
+        border-color: #3b82f6;
+      }
+
+      .btn-add {
+        padding: 8px 14px;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: background 0.2s;
+      }
+
+      .btn-add:hover {
+        background: #2563eb;
+      }
+
+      /* Tabulator : override du thème pour correspondre au dark mode */
+      .tabulator {
+        background: #0f172a !important;
+        border: 1px solid #334155 !important;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        color: #e2e8f0 !important;
+      }
+
+      .tabulator .tabulator-header {
+        background: #1e293b !important;
+        border-bottom: 1px solid #334155 !important;
+        color: #94a3b8 !important;
+      }
+
+      .tabulator .tabulator-row {
+        background: #0f172a !important;
+        border-bottom: 1px solid #1e293b !important;
+        color: #e2e8f0 !important;
+      }
+
+      .tabulator .tabulator-row:hover {
+        background: #1e293b !important;
+      }
+
+      /* ── Styles du widget Graphique (task-chart) ──────── */
+      .chart-subtitle {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-bottom: 12px;
+        text-align: center;
+      }
+
+      /* ── Styles du widget Notes (note-editor) ─────────── */
+      .btn-toggle {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+        background: #334155;
+        color: #94a3b8;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .btn-toggle:hover {
+        background: #475569;
+        color: #e2e8f0;
+      }
+
+      .md-textarea {
+        width: 100%;
+        height: 220px;
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        color: #e2e8f0;
+        font-family: 'Fira Code', 'Cascadia Code', monospace;
+        font-size: 0.85rem;
+        padding: 12px;
+        resize: vertical;
+        outline: none;
+        line-height: 1.6;
+      }
+
+      .md-textarea:focus {
+        border-color: #3b82f6;
+      }
+
+      .note-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 8px;
+      }
+
+      .btn-save {
+        padding: 7px 14px;
+        background: #16a34a;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: background 0.2s;
+      }
+
+      .btn-save:hover:not(:disabled) {
+        background: #15803d;
+      }
+
+      .btn-save:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .md-hint {
+        font-size: 0.75rem;
+        color: #475569;
+      }
+
+      /* Rendu du Markdown — styles pour le contenu généré par Marked */
+      .md-preview {
+        font-size: 0.9rem;
+        line-height: 1.7;
+        color: #cbd5e1;
+        max-height: 280px;
+        overflow-y: auto;
+      }
+
+      .md-preview h1, .md-preview h2, .md-preview h3 {
+        color: #f1f5f9;
+        margin: 12px 0 6px;
+      }
+
+      .md-preview h1 { font-size: 1.4rem; border-bottom: 1px solid #334155; padding-bottom: 6px; }
+      .md-preview h2 { font-size: 1.15rem; }
+      .md-preview h3 { font-size: 1rem; }
+
+      .md-preview p   { margin-bottom: 8px; }
+      .md-preview ul, .md-preview ol { padding-left: 20px; margin-bottom: 8px; }
+      .md-preview li  { margin-bottom: 3px; }
+      .md-preview strong { color: #f1f5f9; }
+      .md-preview em  { color: #93c5fd; }
+      .md-preview code {
+        background: #0f172a;
+        border: 1px solid #334155;
+        padding: 1px 5px;
+        border-radius: 3px;
+        font-family: monospace;
+        font-size: 0.85em;
+        color: #a78bfa;
+      }
+
+      .md-preview blockquote {
+        border-left: 3px solid #3b82f6;
+        padding-left: 12px;
+        color: #94a3b8;
+        margin: 8px 0;
+      }
+
+      /* Tableaux Markdown générés par Marked */
+      .md-preview table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 10px 0;
+        font-size: 0.85rem;
+      }
+
+      .md-preview th, .md-preview td {
+        border: 1px solid #334155;
+        padding: 6px 10px;
+        text-align: left;
+      }
+
+      .md-preview th {
+        background: #1e293b;
+        color: #94a3b8;
+        font-weight: 600;
+      }
+
+      .md-preview tr:nth-child(even) td {
+        background: #0f172a;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>🎯 Dashboard Apprentissage</h1>
+      <p>Lit v3 · GridStack · Tabulator · Chart.js · Marked · Knex · Vite · TypeScript</p>
+    </header>
+
+    <div class="grid-wrapper">
+      <!--
+        GridStack.init() cherche cet élément .grid-stack et le transforme en grille.
+        Les widgets sont ajoutés programmatiquement dans src/main.ts.
+      -->
+      <div class="grid-stack"></div>
+    </div>
+
+    <!--
+      type="module" est REQUIS pour charger des ES Modules.
+      Vite transpile ce fichier TypeScript en JavaScript natif.
+      Le navigateur charge les imports de façon asynchrone et parallèle.
+    -->
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
