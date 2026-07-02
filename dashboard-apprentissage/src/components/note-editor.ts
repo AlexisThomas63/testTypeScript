@@ -121,7 +121,7 @@ export class NoteEditor extends LitElement {
         : html`
             <!--
               Mode lecture : HTML rendu par Marked.
-              .innerHTML=${...} = property binding Lit
+              La syntaxe .innerHTML=... est un property binding Lit :
               Lit injecte directement le HTML parsé dans le DOM.
             -->
             <div
